@@ -2,9 +2,9 @@ export default QuizQuestions = {
     "Level Easy": {
         questions: [
             {
-                question: "dawdaw",
-                options: [""],
-                correctQuestion: ""
+                question: "What is 5x2?",
+                options: ["dawdadwdwdwdww", "dwadaw", "gww", "dwopi"],
+                correctQuestion: "dawdadwdwdwdww"
             },
             {
                 question: "rwadwas",
@@ -51,9 +51,4 @@ export default QuizQuestions = {
             }
         ],
     },
-    
-    // Do the same thing over again for multiple questions
-    // Todo
-    // Make sure to add levels to questions
-    // Connect the levels to the questions
 }

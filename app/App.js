@@ -4,32 +4,28 @@ import { View, Text, SafeAreaView, StatusBar, Image, TouchableOpacity } from "re
 import { Colors, Sizes, Styles } from "./constants"
 
 import Levels from "./data/Levels"
-import QuizQuestions from "./data/QuizQuestions"
 
-import { Quiz } from "./screens/index"
+import { QuizMenu } from "./screens/index"
 
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-
-
-
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen component={MainMenu} name="Main" options={{headerShown: false}}/>
-        <Stack.Screen component={Home} name="Level Easy" options={{ headerShown: false }} />
-        <Stack.Screen component={Home} name="Level Medium" options={{ headerShown: false }} />
-        <Stack.Screen component={Home} name="Level Hard" options={{ headerShown: false }} />
+        <Stack.Screen component={MainMenu} name="Main" options={{ headerShown: false }} />
+        <Stack.Screen component={QuizMenu} name="Level Easy" options={{ headerShown: false }} />
+        <Stack.Screen component={QuizMenu} name="Level Medium" options={{ headerShown: false }} />
+        <Stack.Screen component={QuizMenu} name="Level Hard" options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   )
 }
 
-const MainMenu = ({navigation}) => {
+const MainMenu = ({ navigation }) => {
 
   const allOptions = Levels;
   const [currentLevel, setCurrentLevel] = useState(0)
@@ -44,7 +40,7 @@ const MainMenu = ({navigation}) => {
               key={option}
               style={Styles.LevelsBoxes}
             >
-            <Text style={Styles.LevelOptionsText}>{option}</Text>
+              <Text style={Styles.LevelOptionsText}>{option}</Text>
             </TouchableOpacity >
           ))
         }
@@ -74,18 +70,18 @@ const MainMenu = ({navigation}) => {
           <View style={Styles.BubbleEffectDiagram2} />
           <View style={Styles.BubbleEffectDiagram3} />
 
+          <Text style={Styles.welcomeText}>
+            Welcome to the Quiz
+          </Text>
+
+          <Text style={Styles.infoText}>
+            WELCOME TO THE MATHS QUIZZ, THE WORLD CAN BE CHANGED WITH ALL THE KNOWLEDGE
+          </Text>
+
           {rendersOptionsMainMenu()}
         </View>
       </View>
     </SafeAreaView>
-  )
-}
-
-const Home = ({navigation, route}) => {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Welcome Home, {route.params.titleOfLevel}</Text>
-    </View >
   )
 }
 

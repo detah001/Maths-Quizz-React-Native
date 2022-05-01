@@ -1,5 +1,5 @@
-import Quiz from "./Quiz";
+import QuizMenu from "./QuizMenu";
 
 export {
-    Quiz
+    QuizMenu
 }

@@ -1,27 +1,51 @@
 import React from "react";
-import {Dimensions, StyleSheet} from "react-native";
-const {width, height} = Dimensions.get("window")
+import { Dimensions, StyleSheet } from "react-native";
+const { width, height } = Dimensions.get("window")
 
 export const Colors = {
-    primary : "#614c45",
-    secondary : "#4d2e2a",
-    accents : "#b32b19",
-    
-    white : "#e3e1da",
-    black : "#403f3d",
+    primary: "#614c45",
+    secondary: "#4d2e2a",
+    accents: "#b32b19",
 
-    success : "#47c92c",
-    error : "#ff0000",
+    white: "#e3e1da",
+    black: "#403f3d",
+
+    success: "#47c92c",
+    error: "#ff0000",
     background: "#CED1D6"
 }
 
 export const Sizes = {
-    base : 10,
+    base: 10,
     width,
     height
 }
 
 export const Styles = StyleSheet.create({
+    welcomeText: {
+        position: 'absolute',
+        width: 257,
+        height: 29,
+        left: 75,
+        top: 80,
+
+        fontWeight: 'normal',
+        fontSize: 24,
+
+        color: '#CED1D6',
+    },
+    infoText: {
+        position: 'absolute',
+        width: 292,
+        height: 61,
+        left: 50,
+        top: 161,
+
+        fontWeight: 'normal',
+        fontSize: 14,
+
+        color: '#CED1D6',
+    },
     menuBorderd: {
         position: 'absolute',
         width: 390,
@@ -95,5 +119,53 @@ export const Styles = StyleSheet.create({
         height: 236,
         left: -35,
         top: 80,
+    },
+    QuestionTitle: {
+        position: 'absolute',
+        width: 287,
+        height: 43,
+        left: 14,
+        top: 101,
+
+        fontWeight: 'normal',
+        fontSize: 24,
+
+        color: Colors.white
+    },
+    QuestionLevel: {
+        position: 'absolute',
+        width: 145,
+        height: 29,
+        left: 14,
+        top: 63,
+        opacity: 0.5,
+
+        fontWeight: 'normal',
+        fontSize: 24,
+
+        color: Colors.white
+    },
+    Question: {
+        position: 'absolute',
+        width: 287,
+        height: 100,
+        left: 10,
+        top: 145,
+
+        fontWeight: 'normal',
+
+        fontSize: 24,
+
+        color: Colors.white
+    },
+    BoxChoicesText: {
+        flex: 1,
+
+        textAlign: 'center',
+
+        fontWeight: 'normal',
+        fontSize: 24,
+
+        color: Colors.white
     }
 })
