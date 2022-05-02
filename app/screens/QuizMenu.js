@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useSyncExternalStore } from "react"
 
-import { View, Text, SafeAreaView, StatusBar, Image, TouchableOpacity } from "react-native"
+import { View, Modal, Text, SafeAreaView, StatusBar, Image, TouchableOpacity } from "react-native"
 import { Colors, Sizes, Styles } from "../constants"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
@@ -14,8 +14,106 @@ const Quiz = ({ navigation, route }) => {
     const [correctOption, setCorrectOption] = useState(null)
     const [isOptionDisabled, setIsOptionDisabled] = useState(false)
     const [score, setScore] = useState(0)
+    const [showNextButton, setShowNextButton] = useState(false)
+
+    const [counter, setCounter] = useState(QuizQuestions[route.params.titleOfLevel].timeToAnswer);
+    const [startCountdown, setStartCountdown] = useState(false);
+
+    const handleTimer = () => {
+        useEffect(() => {
+            if (startCountdown) {
+                const timer = counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+                if (counter === 0) {
+                    setStartCountdown(false);
+                    if (currentOptionSelected == null) {
+                        if (currentQuestionIndex == allQuestions.length - 1) {
+                            // SHOW THE SCORE
+                        } else {
+                            setCurrentQuestionIndex(currentQuestionIndex + 1);
+                            setCurrentOptionSelected(null);
+                            setCorrectOption(null);
+                            setIsOptionDisabled(false);
+                            setShowNextButton(false);
+
+                            setCounter(0);
+
+                            setStartCountdown(true);
+                            setCounter(QuizQuestions[route.params.titleOfLevel].timeToAnswer);
+                        }
+                    }
+                }
+                return () => clearTimeout(timer);
+            }
+
+        }, [counter, startCountdown]);
+    }
+
+    const handleAnswer = (selectedOption) => {
+        let selectedCorrectOption = allQuestions[currentQuestionIndex]['correctQuestion'];
+        setCurrentOptionSelected(selectedOption);
+        setCorrectOption(selectedCorrectOption);
+        setIsOptionDisabled(true);
+        if (selectedOption == selectedCorrectOption) {
+            setScore(score + 1)
+        }
+
+        setShowNextButton(true);
+        setStartCountdown(false);
+        setCounter(0);
+    }
+
+    const handleButton = (buttonType) => {
+        if (buttonType === 'Next') {
+            if (currentQuestionIndex == allQuestions.length - 1) {
+
+            } else {
+                setCurrentQuestionIndex(currentQuestionIndex + 1);
+                setCurrentOptionSelected(null);
+                setCorrectOption(null);
+                setIsOptionDisabled(false);
+                setShowNextButton(false);
+
+                setStartCountdown(true);
+                setCounter(QuizQuestions[route.params.titleOfLevel].timeToAnswer);
+            }
+        } else if (buttonType === 'Quit') {
+            navigation.navigate('Main')
+        }
+    }
+
+    const renderNextButton = () => {
+        if (showNextButton) {
+            return (
+                <View style={Styles.NextContainter}>
+                    <TouchableOpacity
+                        onPress={() => handleButton('Next')}
+                        style={Styles.ButtonNext}
+                    >
+
+                        <Text style={{ color: Colors.white, fontSize: 20 }}>Next Button</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => handleButton('Quit')}
+                        style={Styles.ButtonQuit}
+                    >
+
+                        <Text style={{ color: Colors.white, fontSize: 20 }}>Quit</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        } else {
+            return null
+        }
+    }
 
     const renderQuestions = () => {
+        handleTimer()
+        if (startCountdown === false) {
+            setStartCountdown(true)
+        }
+        console.log(score)
+
         return (
             <View>
                 <View style={{
@@ -24,7 +122,7 @@ const Quiz = ({ navigation, route }) => {
                     top: -50,
                 }}>
 
-                    <Text style={Styles.QuestionLevel}>{route.params.titleOfLevel}</Text>
+                    <Text style={Styles.QuestionLevel}>{route.params.titleOfLevel} / Time Left: {counter}</Text>
                     <Text style={Styles.QuestionTitle}>Question {currentQuestionIndex + 1} / {allQuestions.length}</Text>
                     <Text style={Styles.Question}> {allQuestions[currentQuestionIndex]?.question} </Text>
 
@@ -33,23 +131,13 @@ const Quiz = ({ navigation, route }) => {
         )
     }
 
-    const completeAnswer = (selectedOption) => {
-        let selectedCorrectOption = allQuestions[currentQuestionIndex]['correctQuestion'];
-        setCurrentOptionSelected(selectedOption);
-        setCorrectOption(selectedCorrectOption);
-        setIsOptionDisabled(true);
-        if (selectedOption == selectedCorrectOption) {
-            setScore(score + 1)
-        }
-    }
-
     const renderOptions = () => {
         return (
             <View>
                 {
                     allQuestions[currentQuestionIndex]?.options.map(option => (
                         <TouchableOpacity
-                            onPress={() => completeAnswer(option)}
+                            onPress={() => handleAnswer(option)}
                             disabled={isOptionDisabled}
                             key={option}
                             style={{
@@ -80,22 +168,14 @@ const Quiz = ({ navigation, route }) => {
 
                             {
                                 option == correctOption ? (
-                                    <View style={{
-                                        width: 30, height: 30, borderRadius: 30 / 2,
-                                        backgroundColor: Colors.success,
-                                        justifyContent: 'center', alignItems: "center"
-                                    }}>
+                                    <View style={Styles.QuestionRight}>
                                         <MaterialCommunityIcons name="check" style={{
                                             color: Colors.white,
                                             fontSize: 20,
                                         }} />
                                     </View>
                                 ) : option == currentOptionSelected ? (
-                                    <View style={{
-                                        width: 30, height: 30, borderRadius: 30 / 2,
-                                        backgroundColor: Colors.error,
-                                        justifyContent: 'center', alignItems: "center"
-                                    }}>
+                                    <View style={Styles.QuestionWrong}>
                                         <MaterialCommunityIcons name="close" style={{
                                             color: Colors.white,
                                             fontSize: 20,
@@ -145,8 +225,7 @@ const Quiz = ({ navigation, route }) => {
                 {renderOptions()}
 
                 {/* Next Button */}
-
-                {/* Backgrond Image */}
+                {renderNextButton()}
 
             </View>
         </SafeAreaView>

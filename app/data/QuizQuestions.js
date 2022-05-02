@@ -17,6 +17,7 @@ export default QuizQuestions = {
                 correctQuestion: ""
             }
         ],
+        timeToAnswer: 10,
     },
     "Level Medium": {
         questions: [
@@ -36,6 +37,7 @@ export default QuizQuestions = {
                 correctQuestion: ""
             }
         ],
+        timeToAnswer: 20,
     },
     "Level Hard": {
         questions: [
@@ -50,5 +52,6 @@ export default QuizQuestions = {
                 correctQuestion: ""
             }
         ],
+        timeToAnswer: 30,
     },
 }

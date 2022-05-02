@@ -62,7 +62,7 @@ const MainMenu = ({ navigation }) => {
         <View style={Styles.menuBorderd}>
           <View style={Styles.menuBorderdDesc}>
             <Image
-              style={Styles.ImageKid}
+              style={Styles.BackgroundKid}
               source={require('./assets/images/backgroundKid.png')}
             />
           </View>

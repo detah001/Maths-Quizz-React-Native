@@ -113,7 +113,7 @@ export const Styles = StyleSheet.create({
         backgroundColor: '#4F5155',
         borderRadius: 150,
     },
-    ImageKid: {
+    BackgroundKid: {
         position: 'absolute',
         width: 459,
         height: 236,
@@ -134,7 +134,7 @@ export const Styles = StyleSheet.create({
     },
     QuestionLevel: {
         position: 'absolute',
-        width: 145,
+        width: 300,
         height: 29,
         left: 14,
         top: 63,
@@ -167,5 +167,56 @@ export const Styles = StyleSheet.create({
         fontSize: 24,
 
         color: Colors.white
+    },
+    QuestionRight: {
+        width: 30,
+        height: 30,
+        borderRadius: 30 / 2,
+        backgroundColor: Colors.success,
+        justifyContent: 'center',
+        alignItems: "center"
+    },
+    QuestionWrong: {
+        width: 30,
+        height: 30,
+        borderRadius: 30 / 2,
+        backgroundColor: Colors.error,
+        justifyContent: 'center',
+        alignItems: "center"
+    },
+    NextContainter: {
+        position: 'absolute',
+        width: 363,
+        height: 266,
+        left: 13,
+        top: 313,
+
+        backgroundColor: '#6C6B6B',
+        borderRadius: 26,
+        opacity: 0.9
+    },
+    ButtonNext: {
+        width: 329,
+        height: 86,
+        left: 15,
+        top: 50,
+
+        alignItems: "center",
+        justifyContent: "center",
+
+        backgroundColor: '#626262',
+        borderRadius: 10,
+    },
+    ButtonQuit: {
+        width: 329,
+        height: 86,
+        left: 15,
+        top: 59,
+
+        alignItems: "center",
+        justifyContent: "center",
+
+        backgroundColor: '#626262',
+        borderRadius: 10,
     }
 })
