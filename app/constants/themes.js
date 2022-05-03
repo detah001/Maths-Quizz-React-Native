@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get("window")
 export const Colors = {
     primary: "#614c45",
     secondary: "#4d2e2a",
-    accents: "#b32b19",
+    progressBar: "#0a8c51",
 
     white: "#e3e1da",
     black: "#403f3d",
@@ -147,10 +147,10 @@ export const Styles = StyleSheet.create({
     },
     Question: {
         position: 'absolute',
-        width: 287,
+        width: 290,
         height: 100,
-        left: 10,
-        top: 145,
+        left: 8,
+        top: 140,
 
         fontWeight: 'normal',
 
@@ -189,7 +189,7 @@ export const Styles = StyleSheet.create({
         width: 363,
         height: 266,
         left: 13,
-        top: 313,
+        top: 250,
 
         backgroundColor: '#6C6B6B',
         borderRadius: 26,
@@ -199,7 +199,7 @@ export const Styles = StyleSheet.create({
         width: 329,
         height: 86,
         left: 15,
-        top: 50,
+        top: 40,
 
         alignItems: "center",
         justifyContent: "center",

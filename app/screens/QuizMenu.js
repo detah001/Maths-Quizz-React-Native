@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useSyncExternalStore } from "react"
 
-import { View, Modal, Text, SafeAreaView, StatusBar, Image, TouchableOpacity } from "react-native"
+import { View, Modal, Text, SafeAreaView, StatusBar, Image, TouchableOpacity, Animated } from "react-native"
 import { Colors, Sizes, Styles } from "../constants"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
@@ -8,6 +8,7 @@ import QuizQuestions from "../data/QuizQuestions"
 
 const Quiz = ({ navigation, route }) => {
 
+    // all constants
     const allQuestions = QuizQuestions[route.params.titleOfLevel].questions;
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [currentOptionSelected, setCurrentOptionSelected] = useState(null)
@@ -19,10 +20,30 @@ const Quiz = ({ navigation, route }) => {
     const [counter, setCounter] = useState(QuizQuestions[route.params.titleOfLevel].timeToAnswer);
     const [startCountdown, setStartCountdown] = useState(false);
 
+    const [counterProgress, setCounterProgress] = useState(new Animated.Value(0))
+    const progressCounter = counterProgress.interpolate({
+        inputRange: [0, QuizQuestions[route.params.titleOfLevel].timeToAnswer],
+        outputRange: ['0%', '100%']
+    })
+
+    const [progress, setProgress] = useState(new Animated.Value(0))
+    const progressAnim = progress.interpolate({
+        inputRange: [0, allQuestions.length],
+        outputRange: ['0%', '100%']
+    })
+
+    // handlers for different events
     const handleTimer = () => {
         useEffect(() => {
             if (startCountdown) {
                 const timer = counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+
+                Animated.timing(counterProgress, {
+                    toValue: counter,
+                    duration: 100,
+                    useNativeDriver: false
+                }).start();
+
                 if (counter === 0) {
                     setStartCountdown(false);
                     if (currentOptionSelected == null) {
@@ -42,7 +63,13 @@ const Quiz = ({ navigation, route }) => {
                         }
                     }
                 }
-                return () => clearTimeout(timer);
+                return () => clearTimeout(timer); 
+                
+                Animated.timing(progress, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false
+                }).start();
             }
 
         }, [counter, startCountdown]);
@@ -76,11 +103,23 @@ const Quiz = ({ navigation, route }) => {
                 setStartCountdown(true);
                 setCounter(QuizQuestions[route.params.titleOfLevel].timeToAnswer);
             }
+        Animated.timing(progress, {
+            toValue: currentQuestionIndex+1,
+            duration: 1000,
+            useNativeDriver: false
+        }).start();
         } else if (buttonType === 'Quit') {
             navigation.navigate('Main')
+
+            Animated.timing(progress, {
+                toValue: 0,
+                duration: 1000,
+                useNativeDriver: false
+            }).start()
         }
     }
 
+    // renders for different menus
     const renderNextButton = () => {
         if (showNextButton) {
             return (
@@ -122,7 +161,7 @@ const Quiz = ({ navigation, route }) => {
                     top: -50,
                 }}>
 
-                    <Text style={Styles.QuestionLevel}>{route.params.titleOfLevel} / Time Left: {counter}</Text>
+                    <Text style={Styles.QuestionLevel}>{route.params.titleOfLevel}</Text>
                     <Text style={Styles.QuestionTitle}>Question {currentQuestionIndex + 1} / {allQuestions.length}</Text>
                     <Text style={Styles.Question}> {allQuestions[currentQuestionIndex]?.question} </Text>
 
@@ -144,7 +183,7 @@ const Quiz = ({ navigation, route }) => {
                                 width: 329,
                                 height: 86,
                                 top: 160,
-                                left: 10,
+                                left: 15,
 
                                 flexDirection: 'row',
                                 alignItems: 'center',
@@ -153,12 +192,12 @@ const Quiz = ({ navigation, route }) => {
                                 marginVertical: 10,
 
                                 backgroundColor: option == correctOption ? Colors.success + '20'
-                                    : option == currentOptionSelected ? Colors.error + '20'
-                                        : Colors.secondary + '20',
+                                : option == currentOptionSelected ? Colors.error + '20'
+                                : Colors.secondary + '20',
 
                                 borderColor: option == correctOption ? Colors.success
-                                    : option == currentOptionSelected ? Colors.error
-                                        : Colors.secondary + '40',
+                                : option == currentOptionSelected ? Colors.error
+                                : Colors.secondary + '40',
 
                                 borderRadius: 10,
                                 borderWidth: 3
@@ -191,6 +230,50 @@ const Quiz = ({ navigation, route }) => {
         )
     }
 
+    const renderProgressBar = () => {
+        return (
+            <View style={{
+                width: '100%',
+                height: 25,
+                top: 180,
+                borderRadius: 5,
+                backgroundColor: '#00000020',
+            }}>
+                <Animated.View style={[{
+                    height: 25,
+                    borderRadius: 5,
+                    backgroundColor: Colors.progressBar
+                }, {
+                    width: progressAnim
+                }]}>
+                </Animated.View>
+                <Text style={{ top: -23, textAlign: 'center', color: Colors.white}}>Progress</Text>
+            </View>
+        )
+    }
+
+    const renderCounterPorgressBar = () => {
+        return (
+            <View style={{
+                width: '100%',
+                height: 25,
+                borderRadius: 20,
+                backgroundColor: '#00000020',
+            }}>
+                <Animated.View style={[{
+                    height: 20,
+                    borderRadius: 20,
+                    backgroundColor: Colors.progressBar
+                }, {
+                    width: progressCounter
+                }]}>
+
+                </Animated.View>
+                <Text style={{ top: -19, textAlign: 'center', color: Colors.white }}>Time Left: {counter}</Text>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={{
             flex: 1,
@@ -216,7 +299,9 @@ const Quiz = ({ navigation, route }) => {
                     resizeMode={"contain"}
                 />
 
-                {/* Progress Bar */}
+                {/* Progress Bars */}
+                {renderProgressBar()}
+                {renderCounterPorgressBar()}
 
                 {/* Question */}
                 {renderQuestions()}
