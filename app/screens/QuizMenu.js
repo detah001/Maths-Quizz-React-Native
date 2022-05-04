@@ -237,7 +237,7 @@ const Quiz = ({ navigation, route }) => {
                 height: 25,
                 top: 180,
                 borderRadius: 5,
-                backgroundColor: '#00000020',
+                backgroundColor: '#00000020'
             }}>
                 <Animated.View style={[{
                     height: 25,
@@ -258,10 +258,10 @@ const Quiz = ({ navigation, route }) => {
                 width: '100%',
                 height: 25,
                 borderRadius: 20,
-                backgroundColor: '#00000020',
+                backgroundColor: '#00000020'
             }}>
                 <Animated.View style={[{
-                    height: 20,
+                    height: 25,
                     borderRadius: 20,
                     backgroundColor: Colors.progressBar
                 }, {
@@ -269,7 +269,7 @@ const Quiz = ({ navigation, route }) => {
                 }]}>
 
                 </Animated.View>
-                <Text style={{ top: -19, textAlign: 'center', color: Colors.white }}>Time Left: {counter}</Text>
+                <Text style={{ top: -22, textAlign: 'center', color: Colors.white }}>Time Left: {counter}</Text>
             </View>
         )
     }
