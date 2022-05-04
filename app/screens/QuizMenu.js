@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useSyncExternalStore } from "react"
 
-import { View, Modal, Text, SafeAreaView, StatusBar, Image, TouchableOpacity, Animated } from "react-native"
-import { Colors, Sizes, Styles } from "../constants"
+import { View, Modal, Text, SafeAreaView, StatusBar, Image, TouchableOpacity, Animated, Alert } from "react-native"
+import { Colors, Sizes, Styles, StylesMedal } from "../constants"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
-import QuizQuestions from "../data/QuizQuestions"
+import { QuizQuestions, QuizNextLevels, Levels, TextFeedback } from "../data";
 
 const Quiz = ({ navigation, route }) => {
 
-    // all constants
+    // all constants 
+
     const allQuestions = QuizQuestions[route.params.titleOfLevel].questions;
+    const pointsAchieved = QuizQuestions[route.params.titleOfLevel].pointsPerLevel;
+
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [currentOptionSelected, setCurrentOptionSelected] = useState(null)
     const [correctOption, setCorrectOption] = useState(null)
@@ -19,6 +22,7 @@ const Quiz = ({ navigation, route }) => {
 
     const [counter, setCounter] = useState(QuizQuestions[route.params.titleOfLevel].timeToAnswer);
     const [startCountdown, setStartCountdown] = useState(false);
+    const [showMedal, setShowMedal] = useState(false)
 
     const [counterProgress, setCounterProgress] = useState(new Animated.Value(0))
     const progressCounter = counterProgress.interpolate({
@@ -31,6 +35,58 @@ const Quiz = ({ navigation, route }) => {
         inputRange: [0, allQuestions.length],
         outputRange: ['0%', '100%']
     })
+
+    const showAlert = (alertTitle, alertMessage) => {
+        Alert.alert(
+            alertTitle,
+            alertMessage,
+            [
+                {
+                    text: "OK",
+                    onPress: () => navigation.navigate('Main'),
+                    style: "cancel",
+                },
+            ],
+            {
+                cancelable: true,
+            }
+        );
+    }
+
+    const nextLevel = (levelNow) => {
+        const nextLevelFromNow = QuizNextLevels[levelNow]
+        if (nextLevelFromNow === undefined) {
+            showAlert("Last Level", "You have reached to the last level, you will be redirected to the main menu.");
+        } else {
+            navigation.navigate(nextLevelFromNow, { titleOfLevel: nextLevelFromNow })
+            refreshConstants();
+        }
+    }
+
+    const refreshConstants = () => {
+        setCurrentQuestionIndex(0);
+        setScore(0);
+        setCounter(0);
+
+        setCurrentOptionSelected(null);
+        setCorrectOption(null);
+        setIsOptionDisabled(false);
+        setShowNextButton(false);
+        setShowMedal(false)
+        setStartCountdown(false);
+
+        Animated.timing(counterProgress, {
+            toValue: 0,
+            duration: 1000,
+            useNativeDriver: false
+        }).start();
+
+        Animated.timing(progress, {
+            toValue: 0,
+            duration: 1000,
+            useNativeDriver: false
+        }).start();
+    }
 
     // handlers for different events
     const handleTimer = () => {
@@ -49,6 +105,7 @@ const Quiz = ({ navigation, route }) => {
                     if (currentOptionSelected == null) {
                         if (currentQuestionIndex == allQuestions.length - 1) {
                             // SHOW THE SCORE
+                            setShowMedal(true)
                         } else {
                             setCurrentQuestionIndex(currentQuestionIndex + 1);
                             setCurrentOptionSelected(null);
@@ -92,7 +149,7 @@ const Quiz = ({ navigation, route }) => {
     const handleButton = (buttonType) => {
         if (buttonType === 'Next') {
             if (currentQuestionIndex == allQuestions.length - 1) {
-
+                setShowMedal(true)
             } else {
                 setCurrentQuestionIndex(currentQuestionIndex + 1);
                 setCurrentOptionSelected(null);
@@ -129,7 +186,7 @@ const Quiz = ({ navigation, route }) => {
                         style={Styles.ButtonNext}
                     >
 
-                        <Text style={{ color: Colors.white, fontSize: 20 }}>Next Button</Text>
+                        <Text style={{ color: Colors.white, fontSize: 20 }}>Next Question</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -151,8 +208,6 @@ const Quiz = ({ navigation, route }) => {
         if (startCountdown === false) {
             setStartCountdown(true)
         }
-        console.log(score)
-
         return (
             <View>
                 <View style={{
@@ -298,6 +353,74 @@ const Quiz = ({ navigation, route }) => {
                     source={require('../assets/images/QuzBackdrop.png')}
                     resizeMode={"contain"}
                 />
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={showMedal}
+                >
+                    <View style={StylesMedal.MedalView}>
+
+                        <Image
+                            style={StylesMedal.BackgroundImage}
+                            source={require('../assets/images/CelebrationBackground.png')}
+                            resizeMode={"contain"}
+                        />
+
+                        <Text style={StylesMedal.LevelText}>{route.params.titleOfLevel}</Text>
+                        <Text style={StylesMedal.QuizResultText}>Quiz Results</Text>
+
+                        <View style={{
+                            position: 'absolute',
+                            width: 330,
+                            height: 198,
+                            left: 30,
+                            top: 165,
+
+                            backgroundColor: score > (allQuestions.length / QuizQuestions[route.params.titleOfLevel].rightAnswersToPass) ? '#46A255' : '#AE3C3C',
+                            borderRadius: 10,
+                        }}>
+                            
+                            <Text style={StylesMedal.ContainterBoxText}>{score > (allQuestions.length / QuizQuestions[route.params.titleOfLevel].rightAnswersToPass) ? 'Congratulations!' : 'Better Luck Next Time!'}</Text>
+                            <Text style={StylesMedal.ContainterBoxTextDesc}>{score > (allQuestions.length / QuizQuestions[route.params.titleOfLevel].rightAnswersToPass) ? TextFeedback['Win'] : TextFeedback['Lose']}</Text>
+
+                            <Text style={StylesMedal.ScoreText}>Your Score</Text>
+                            <Text style={{
+                                fontSize: 30,
+                                left: 130,
+                                top: 230,
+                                color: score > (allQuestions.length / QuizQuestions[route.params.titleOfLevel].rightAnswersToPass) ? Colors.success : Colors.error
+                            }}>{score} <Text style={{color: Colors.white}}>/ {allQuestions.length}</Text>
+                            </Text>
+
+                            <Text style={StylesMedal.EarnedPointsText}>Earned Points</Text>
+                                <Text style={{
+                                    fontSize: 30,
+                                    top: 255,
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    textAlign: 'center',
+                                    color: Colors.white
+                                }}>{pointsAchieved} Points
+                            </Text>
+
+                            <TouchableOpacity
+                                onPress={() => nextLevel(route.params.titleOfLevel)}
+                                style={StylesMedal.NextBox}
+                            >
+                                <Text style={StylesMedal.NextBoxText}>NEXT</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Main')}
+                                style={StylesMedal.BackToMenuBox}
+                            >
+                                <Text style={StylesMedal.BackToMenuBoxText}>BACK TO MENU</Text>
+                            </TouchableOpacity>
+
+                        </View>
+                    </View>
+                </Modal>
 
                 {/* Progress Bars */}
                 {renderProgressBar()}

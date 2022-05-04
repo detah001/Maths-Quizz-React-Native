@@ -1,7 +1,8 @@
-import {Colors, Sizes, Styles} from "./themes";
+import { Colors, Sizes, Styles, StylesMedal } from "./themes";
 
 export {
     Colors,
     Sizes,
-    Styles
+    Styles,
+    StylesMedal
 }

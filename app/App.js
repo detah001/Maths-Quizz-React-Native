@@ -3,9 +3,8 @@ import React, { useState } from "react"
 import { View, Text, SafeAreaView, StatusBar, Image, TouchableOpacity } from "react-native"
 import { Colors, Sizes, Styles } from "./constants"
 
-import Levels from "./data/Levels"
-
-import { QuizMenu } from "./screens/index"
+import { Levels } from "./data";
+import { QuizMenu } from "./screens"
 
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

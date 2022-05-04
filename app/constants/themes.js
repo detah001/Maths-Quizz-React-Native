@@ -12,7 +12,9 @@ export const Colors = {
 
     success: "#47c92c",
     error: "#ff0000",
-    background: "#CED1D6"
+    background: "#CED1D6",
+
+    medalBackGround: "#666869",
 }
 
 export const Sizes = {
@@ -124,7 +126,7 @@ export const Styles = StyleSheet.create({
         position: 'absolute',
         width: 287,
         height: 43,
-        left: 14,
+        left: 12,
         top: 101,
 
         fontWeight: 'normal',
@@ -218,5 +220,144 @@ export const Styles = StyleSheet.create({
 
         backgroundColor: '#626262',
         borderRadius: 10,
+    }
+})
+
+export const StylesMedal = StyleSheet.create({
+    MedalView: {
+        flex: 1,
+        backgroundColor: Colors.medalBackGround,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    BackgroundImage: {
+        position: 'absolute',
+        width: 484,
+        height: 844,
+        left: -47,
+        top: 0
+    },
+    LevelText: {
+        position: 'absolute',
+        width: 300,
+        height: 29,
+        left: 135,
+        top: 78,
+        opacity: 0.5,
+
+        fontWeight: 'normal',
+        fontSize: 24,
+
+        color: Colors.white
+    },
+    QuizResultText: {
+        position: 'absolute',
+        width: 287,
+        height: 43,
+        left: 95,
+        top: 104,
+
+        fontWeight: 'bold',
+        fontSize: 34,
+
+        color: Colors.white
+    },
+    ContainterBoxText: {
+        position: 'absolute',
+        width: 287,
+        height: 43,
+        top: 21,
+
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        fontSize: 24,
+
+        textAlign: 'center',
+        marginLeft: 20,
+
+        color: Colors.white
+    },
+    ContainterBoxTextDesc: {
+        position: 'absolute',
+        width: 287,
+        height: 120,
+        top: 50,
+
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        fontSize: 24,
+
+        textAlign: 'center',
+        marginLeft: 20,
+
+        color: Colors.white
+    },
+    ScoreText: {
+        position: 'absolute',
+        width: 287,
+        height: 43,
+        left: 100,
+        top: 205,
+        opacity: 0.5,
+
+        fontWeight: 'normal',
+        fontSize: 24,
+
+        color: Colors.white
+    },
+    EarnedPointsText: {
+        position: 'absolute',
+        width: 287,
+        height: 43,
+        left: 85,
+        top: 265,
+        opacity: 0.5,
+
+        fontWeight: 'normal',
+        fontSize: 24,
+
+        color: Colors.white
+    },
+    NextBox: {
+        position: 'absolute',
+        width: 329,
+        height: 86,
+        left: 0,
+        top: 350,
+
+        backgroundColor: '#626262',
+        borderRadius: 10,
+    },
+    NextBoxText: {
+        textAlign: 'center',
+        alignItems: 'center',
+        marginVertical: 15,
+
+        color: Colors.white,
+        fontSize: 40,
+
+        fontWeight: 'bold',
+        fontStyle: 'italic'
+    },
+    BackToMenuBox: {
+        position: 'absolute',
+        width: 329,
+        height: 86,
+        left: 0,
+        top: 450,
+
+        backgroundColor: '#626262',
+        borderRadius: 10,
+    },
+    BackToMenuBoxText: {
+        textAlign: 'center',
+        alignItems: 'center',
+        marginVertical: 15,
+
+        color: Colors.white,
+        fontSize: 40,
+
+        fontWeight: 'bold',
+        fontStyle: 'italic'
     }
 })
